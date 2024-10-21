@@ -14,15 +14,20 @@ import PHD from './pages/PHD.jsx';
 import Conference from './pages/Conference.jsx';
 import Journal from './pages/Journal.jsx';
 import Notifications from './pages/Notifications.jsx';
+import Auth from './pages/Auth.jsx';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path:"/",
+    element:<Auth/>
+  },
+  {
+    path: "/dashboard",
     element: <Dashboard/>,
     children: [
       {
         path: 'patent',
-        element: <Patent />,
+        element: <Patent/>,
       },
       {
         path: 'studyleave',
@@ -47,6 +52,10 @@ const router = createBrowserRouter([
       {
         path:'notification',
         element: <Notifications/>
+      },
+      {
+        path: 'patent',
+        element: <Patent/>,
       }
       
     ],
