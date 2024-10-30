@@ -15,52 +15,56 @@ import Conference from './pages/Conference.jsx';
 import Journal from './pages/Journal.jsx';
 import Notifications from './pages/Notifications.jsx';
 import Auth from './pages/Auth.jsx';
+import CompleteForm from './forms/CompleteForm.jsx';
+
+
+
+const FormWrapper = ({ formType }) => {
+  console.log("form type in main = " , formType);
+  return <CompleteForm formType={formType} />;
+};
 
 const router = createBrowserRouter([
   {
-    path:"/",
-    element:<Auth/>
+    path: "/",
+    element: <Auth />,
   },
   {
     path: "/dashboard",
-    element: <Dashboard/>,
+    element: <Dashboard />,
     children: [
       {
         path: 'patent',
-        element: <Patent/>,
+        element: <FormWrapper formType="patent" />,
       },
       {
         path: 'studyleave',
-        element : <StudyLeave/>
+        element: <FormWrapper formType="studyLeave" />,
       },
       {
         path: 'travellingallowances',
-        element : <TravellingAllowances/>
+        element: <FormWrapper formType="travellingallowances" />,
       },
       {
         path: 'phd',
-        element : <PHD/>
+        element: <FormWrapper formType="phd" />,
       },
       {
         path: 'conference',
-        element : <Conference/>
+        element: <FormWrapper formType="conference" />,
       },
       {
         path: 'journal',
-        element : <Journal/>
+        element: <FormWrapper formType="journal" />,
       },
       {
-        path:'notification',
-        element: <Notifications/>
+        path: 'notification',
+        element: <Notifications />,
       },
-      {
-        path: 'patent',
-        element: <Patent/>,
-      }
-      
     ],
   },
 ]);
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
