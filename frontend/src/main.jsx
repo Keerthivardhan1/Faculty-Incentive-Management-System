@@ -16,6 +16,7 @@ import Journal from './pages/Journal.jsx';
 import Notifications from './pages/Notifications.jsx';
 import Auth from './pages/Auth.jsx';
 import CompleteForm from './forms/CompleteForm.jsx';
+import LandingPage from './pages/LandingPage.jsx';
 
 
 

@@ -23,9 +23,24 @@ const CompleteForm = ({ formType }) => {
   }, [formType]);
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    const { id, value, name } = e.target;
+
+    console.log("e =  " , e);
+  
+    // Check if it's a PDF file input
+    if (name === "pdf") {
+      console.log("its from data")
+      setFormData((prevFormData) => {
+        // Check if "pdf" key already exists
+        const updatedPDFs = prevFormData.pdf ? [...prevFormData.pdf, value] : [value];
+        return { ...prevFormData, pdf: updatedPDFs };
+      });
+    } else {
+      // For other input fields
+      setFormData({ ...formData, [id]: value });
+    }
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -33,26 +48,52 @@ const CompleteForm = ({ formType }) => {
     console.log("Validation errors:", validationErrors);
   
     if (Object.keys(validationErrors).length === 0) {
+      //http://localhost:5000/home/patent/insert
+
+      fetch(`http://localhost:5000/home/${formType}/insert`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }).then((response) => response.json()) // Parse the response as JSON
+      .then((data) => {
+        setMessage(data.message);
+        setStatus(data.message);
+        if (data.message === "PDFs merged and saved successfully") {
+          alert(
+            "The token generated for this submission is " +
+              data.conferenceApplication.token
+          );
+        }
+      })
+      .catch((error) => {
+        setMessage("An error occurred while submitting the form.");
+        console.error(error);
+      });
+
       console.log("Form submitted successfully", formData);
-      setStatus("Form submitted successfully");
-      setErrors({})
-      setFormData({})
+      
+      // setErrors({})
+      // setFormData({})
     } else {
       setErrors(validationErrors); // Now an object with field names as keys
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 max-w-sm">
+    <form onSubmit={handleSubmit} className="grid gap-4 max-w-sm" encType="multipart/form-data">
     {fields.map((field) => (
       <div
         key={field.name}
         className="grid w-full max-w-sm items-center gap-1.5"
       >
         <Label htmlFor={field.name}>{field.label}</Label>
+        
         <Input
           type={field.type}
           id={field.name}
+          name={field.name}
           placeholder={field.placeholder}
           value={formData[field.name] || ""}
           onChange={handleInputChange}
